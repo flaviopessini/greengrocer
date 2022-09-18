@@ -1,6 +1,6 @@
 # greengrocer
 
-Projeto Flutter de uma lojinha quitanda
+Projeto Flutter de uma lojinha quitanda do curso "Crie um App de Quitanda Virtual com Flutter + GetX - 2022" da Udemy
 
 ## Getting Started
 
