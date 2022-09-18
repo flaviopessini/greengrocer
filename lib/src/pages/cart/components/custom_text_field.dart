@@ -10,6 +10,7 @@ class CustomTextField extends StatefulWidget {
   final String? initialValue;
   final String? Function(String?)? validator;
   final void Function(String?)? onSaved;
+  final GlobalKey<FormFieldState>? formKey;
   final bool readOnly;
   final bool isSecret;
 
@@ -23,6 +24,7 @@ class CustomTextField extends StatefulWidget {
     this.initialValue,
     this.validator,
     this.onSaved,
+    this.formKey,
     this.readOnly = false,
     this.isSecret = false,
   }) : super(key: key);
@@ -43,6 +45,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      key: widget.formKey,
       controller: widget.controller,
       initialValue: widget.initialValue,
       readOnly: widget.readOnly,
