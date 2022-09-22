@@ -13,7 +13,6 @@ class AuthController extends GetxController {
 
   UserModel user = UserModel();
 
-
   @override
   void onInit() {
     super.onInit();
@@ -54,6 +53,24 @@ class AuthController extends GetxController {
     isLoading.value = true;
     final AuthResult result =
         await authRepository.signIn(email: email, password: password);
+    isLoading.value = false;
+    result.when(
+      success: (user) {
+        this.user = user;
+        saveTokenAndGoToBase();
+      },
+      error: (message) {
+        UtilsServices.showToast(
+          message: message,
+          isError: true,
+        );
+      },
+    );
+  }
+
+  Future<void> signUp() async {
+    isLoading.value = true;
+    final AuthResult result = await authRepository.signUp(user);
     isLoading.value = false;
     result.when(
       success: (user) {
