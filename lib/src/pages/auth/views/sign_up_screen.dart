@@ -109,9 +109,7 @@ class SignUpScreen extends StatelessWidget {
                                 ),
                               ),
                               onPressed: () {
-                                if(_formKey.currentState!.validate()){
-
-                                }
+                                if (_formKey.currentState!.validate()) {}
                               },
                               child: Text(
                                 'Cadastrar',

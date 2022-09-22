@@ -108,7 +108,7 @@ class SignInScreen extends StatelessWidget {
                                         String email =
                                             emailController.text.trim();
                                         String password =
-                                            passwordController.text.trim();
+                                        passwordController.text.trim();
 
                                         ctrl.signIn(
                                             email: email, password: password);

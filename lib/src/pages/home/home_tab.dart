@@ -136,9 +136,11 @@ class _HomeTabState extends State<HomeTab> {
                     : ListView(
                         scrollDirection: Axis.horizontal,
                         shrinkWrap: true,
-                        children: List.generate(mock.categories.length, (index) {
+                        children:
+                            List.generate(mock.categories.length, (index) {
                           return Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 8.0),
                             child: Align(
                               alignment: Alignment.center,
                               child: CustomShimmer(

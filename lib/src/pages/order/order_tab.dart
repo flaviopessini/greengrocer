@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:greengrocer/src/configs/app_data.dart' as mock;
 import 'package:greengrocer/src/pages/order/components/order_tile.dart';
-import 'package:greengrocer/src/services/utils_services.dart';
 
 class OrderTab extends StatelessWidget {
   const OrderTab({Key? key}) : super(key: key);
