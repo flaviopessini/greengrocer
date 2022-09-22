@@ -6,6 +6,7 @@ import 'package:greengrocer/src/pages/auth/controllers/auth_controller.dart';
 import 'package:greengrocer/src/pages/cart/components/custom_text_field.dart';
 import 'package:greengrocer/src/pages/common_widgets/app_name_widget.dart';
 import 'package:greengrocer/src/pages_routes/pages_routes.dart';
+import 'package:greengrocer/src/services/validators.dart';
 
 class SignInScreen extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
@@ -79,15 +80,7 @@ class SignInScreen extends StatelessWidget {
                           leftIcon: Icons.email_rounded,
                           label: 'E-mail',
                           inputType: TextInputType.emailAddress,
-                          validator: (String? email) {
-                            if (email == null || email.isEmpty) {
-                              return 'Digite seu e-mail';
-                            }
-                            if (!email.isEmail) {
-                              return 'Endereço de e-mail inválido';
-                            }
-                            return null;
-                          },
+                          validator: emailValidator,
                         ),
                         const SizedBox(height: 8.0),
                         CustomTextField(
@@ -95,15 +88,7 @@ class SignInScreen extends StatelessWidget {
                           leftIcon: Icons.lock_rounded,
                           label: 'Senha',
                           isSecret: true,
-                          validator: (String? password) {
-                            if (password == null || password.isEmpty) {
-                              return 'Informe a senha';
-                            }
-                            if (password.length < 6) {
-                              return 'Inválida';
-                            }
-                            return null;
-                          },
+                          validator: passwordValidator,
                         ),
                         const SizedBox(height: 8.0),
                         SizedBox(
