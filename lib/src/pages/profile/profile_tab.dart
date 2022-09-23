@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:greengrocer/src/configs/app_data.dart' as mock;
+import 'package:greengrocer/src/pages/auth/controllers/auth_controller.dart';
 import 'package:greengrocer/src/pages/cart/components/custom_text_field.dart';
 import 'package:greengrocer/src/services/utils_services.dart';
 
@@ -11,6 +13,8 @@ class ProfileTab extends StatefulWidget {
 }
 
 class _ProfileTabState extends State<ProfileTab> {
+  final authController = Get.find<AuthController>();
+
   @override
   Widget build(BuildContext context) {
     final user = mock.user;
@@ -20,7 +24,7 @@ class _ProfileTabState extends State<ProfileTab> {
         title: const Text('Profile'),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () => authController.signOut(),
             icon: const Icon(Icons.logout_rounded),
           ),
         ],
