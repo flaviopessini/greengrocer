@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:greengrocer/src/pages/auth/controllers/auth_controller.dart';
 import 'package:greengrocer/src/pages/cart/components/custom_text_field.dart';
 import 'package:greengrocer/src/services/validators.dart';
 
 class ForgotPasswordDialog extends StatelessWidget {
+  final _formFieldKey = GlobalKey<FormFieldState>();
   final String email;
   final emailController = TextEditingController();
-  final formFieldKey = GlobalKey<FormFieldState>();
+  final authController = Get.find<AuthController>();
 
   ForgotPasswordDialog({
     Key? key,
@@ -47,13 +49,14 @@ class ForgotPasswordDialog extends StatelessWidget {
                     const Padding(
                       padding: EdgeInsets.symmetric(vertical: 8.0),
                       child: Center(
-                        child: Text('Digite seu e-mail para recuperar sua senha'),
+                        child:
+                            Text('Digite seu e-mail para recuperar sua senha'),
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 16.0),
                       child: CustomTextField(
-                        formKey: formFieldKey,
+                        formKey: _formFieldKey,
                         controller: emailController,
                         leftIcon: Icons.email_rounded,
                         label: 'E-mail',
@@ -65,8 +68,9 @@ class ForgotPasswordDialog extends StatelessWidget {
                       height: 40.0,
                       child: OutlinedButton.icon(
                         onPressed: () {
-                          if(formFieldKey.currentState!.validate()){
-                            //
+                          if (_formFieldKey.currentState!.validate()) {
+                            authController.resetPassword(emailController.text);
+                            Get.back(result: true);
                           }
                         },
                         icon: const Icon(Icons.send_rounded),

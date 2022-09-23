@@ -7,6 +7,7 @@ import 'package:greengrocer/src/pages/auth/views/components/forgot_password_dial
 import 'package:greengrocer/src/pages/cart/components/custom_text_field.dart';
 import 'package:greengrocer/src/pages/common_widgets/app_name_widget.dart';
 import 'package:greengrocer/src/pages_routes/pages_routes.dart';
+import 'package:greengrocer/src/services/utils_services.dart';
 import 'package:greengrocer/src/services/validators.dart';
 
 class SignInScreen extends StatelessWidget {
@@ -142,12 +143,21 @@ class SignInScreen extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(14.0),
                               ),
                             ),
-                            onPressed: () {
-                              showDialog(
+                            onPressed: () async {
+                              FocusScope.of(context).unfocus();
+
+                              final result = await showDialog<bool?>(
                                 context: context,
                                 builder: (_) => ForgotPasswordDialog(
                                     email: emailController.text),
                               );
+
+                              if (result ?? false) {
+                                UtilsServices.showToast(
+                                  message:
+                                      'Um link de recuperação de senha foi enviado para seu e-mail',
+                                );
+                              }
                             },
                             child: const Text(
                               'Esqueceu a senha?',
