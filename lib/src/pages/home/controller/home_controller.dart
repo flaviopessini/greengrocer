@@ -1,7 +1,10 @@
 import 'package:get/get.dart';
 import 'package:greengrocer/src/models/category_model.dart';
+import 'package:greengrocer/src/models/item_model.dart';
 import 'package:greengrocer/src/pages/home/repo/home_repository.dart';
 import 'package:greengrocer/src/services/utils_services.dart';
+
+const int itemsPerPage = 6;
 
 class HomeController extends GetxController {
   final _homeRepository = HomeRepository();
@@ -9,6 +12,8 @@ class HomeController extends GetxController {
   RxBool isLoading = false.obs;
 
   List<CategoryModel> categories = [];
+
+  List<ItemModel> products = [];
 
   CategoryModel? currentCategory;
 
@@ -21,6 +26,8 @@ class HomeController extends GetxController {
   void selectCategory(CategoryModel category) {
     currentCategory = category;
     update();
+
+    getProductList();
   }
 
   Future<void> getCategoryList() async {
@@ -34,9 +41,33 @@ class HomeController extends GetxController {
           return;
         }
         categories.sort(
-          (a, b) => a.title!.toLowerCase().compareTo(b.title!.toLowerCase()),
+          (a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()),
         );
         selectCategory(categories.first);
+      },
+      error: (message) {
+        UtilsServices.showToast(message: message, isError: true);
+      },
+    );
+  }
+
+  Future<void> getProductList() async {
+    final body = {
+      'page': currentCategory!.pagination,
+      'categoryId': currentCategory!.id,
+      'itemsPerPage': itemsPerPage,
+    };
+
+    isLoading.value = true;
+    final result = await _homeRepository.getProductList(body);
+    isLoading.value = false;
+    result.when(
+      success: (data) {
+        products.assignAll(data);
+        if (data.isEmpty) {
+          return;
+        }
+        print(products);
       },
       error: (message) {
         UtilsServices.showToast(message: message, isError: true);

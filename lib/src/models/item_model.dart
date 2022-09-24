@@ -1,19 +1,39 @@
+import 'package:json_annotation/json_annotation.dart';
+
+part 'item_model.g.dart';
+
+@JsonSerializable()
 class ItemModel {
-  final String itemName;
+  String id;
 
-  final String description;
+  @JsonKey(name: 'title')
+  String itemName;
 
-  final String imgUrl;
+  String description;
 
-  final String unit;
+  @JsonKey(name: 'picture')
+  String imgUrl;
 
-  final double price;
+  String unit;
+
+  double price;
 
   ItemModel({
+    this.id = '',
     required this.itemName,
     required this.description,
     required this.imgUrl,
     required this.unit,
     required this.price,
   });
+
+  factory ItemModel.fromJson(Map<String, dynamic> json) =>
+      _$ItemModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ItemModelToJson(this);
+
+  @override
+  String toString() {
+    return 'ItemModel{id: $id, itemName: $itemName, description: $description, imgUrl: $imgUrl, unit: $unit, price: $price}';
+  }
 }

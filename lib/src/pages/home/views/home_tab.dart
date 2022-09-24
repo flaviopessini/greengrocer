@@ -113,7 +113,7 @@ class _HomeTabState extends State<HomeTab> {
                       ? ListView.separated(
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (_, index) => CategoryTile(
-                            category: ctrl.categories[index].title ?? '',
+                            category: ctrl.categories[index].title,
                             isSelected:
                                 ctrl.currentCategory == ctrl.categories[index],
                             onPressed: () {

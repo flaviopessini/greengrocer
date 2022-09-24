@@ -1,16 +1,25 @@
+import 'package:greengrocer/src/models/item_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'category_model.g.dart';
 
 @JsonSerializable()
 class CategoryModel {
-  String? id;
+  String id;
 
-  String? title;
+  String title;
+
+  @JsonKey(defaultValue: [])
+  List<ItemModel> items;
+
+  @JsonKey(defaultValue: 0)
+  int pagination;
 
   CategoryModel({
-    this.id,
-    this.title,
+    required this.id,
+    required this.title,
+    required this.items,
+    required this.pagination,
   });
 
   factory CategoryModel.fromJson(Map<String, dynamic> json) =>
@@ -20,6 +29,6 @@ class CategoryModel {
 
   @override
   String toString() {
-    return 'CategoryModel{id: $id, title: $title}';
+    return 'CategoryModel{id: $id, title: $title, items: $items, pagination: $pagination}';
   }
 }
