@@ -9,31 +9,63 @@ const int itemsPerPage = 6;
 class HomeController extends GetxController {
   final _homeRepository = HomeRepository();
 
-  RxBool isLoading = false.obs;
+  bool isCategoryLoading = false;
+
+  bool isProductLoading = false;
 
   List<CategoryModel> categories = [];
 
-  List<ItemModel> products = [];
-
   CategoryModel? currentCategory;
+
+  List<ItemModel> get products => currentCategory?.items ?? [];
+
+  bool get isLastPage {
+    if (currentCategory!.items.length < itemsPerPage) {
+      return true;
+    }
+    return currentCategory!.pagination * itemsPerPage > products.length;
+  }
 
   @override
   void onInit() {
     super.onInit();
+
+    // Inicia com efeito loading para os produtos enquanto as categorias são carregadas.
+    setProductLoading(true);
+
     getCategoryList();
+  }
+
+  void setCategoryLoading(bool loading) {
+    isCategoryLoading = loading;
+    update();
+  }
+
+  void setProductLoading(bool loading) {
+    isProductLoading = loading;
+    update();
   }
 
   void selectCategory(CategoryModel category) {
     currentCategory = category;
     update();
 
+    if (currentCategory!.items.isNotEmpty) {
+      return;
+    }
+
     getProductList();
   }
 
+  void loadMoreProducts() {
+    currentCategory!.pagination++;
+    getProductList(loadingEffect: false);
+  }
+
   Future<void> getCategoryList() async {
-    isLoading.value = true;
+    setCategoryLoading(true);
     final result = await _homeRepository.getCategoryList();
-    isLoading.value = false;
+    setCategoryLoading(false);
     result.when(
       success: (data) {
         categories.assignAll(data);
@@ -51,23 +83,24 @@ class HomeController extends GetxController {
     );
   }
 
-  Future<void> getProductList() async {
+  Future<void> getProductList({bool loadingEffect = true}) async {
+    if (loadingEffect) {
+      setProductLoading(true);
+    }
     final body = {
       'page': currentCategory!.pagination,
       'categoryId': currentCategory!.id,
       'itemsPerPage': itemsPerPage,
     };
 
-    isLoading.value = true;
     final result = await _homeRepository.getProductList(body);
-    isLoading.value = false;
+    setProductLoading(false);
     result.when(
       success: (data) {
-        products.assignAll(data);
         if (data.isEmpty) {
           return;
         }
-        print(products);
+        currentCategory!.items.addAll(data);
       },
       error: (message) {
         UtilsServices.showToast(message: message, isError: true);

@@ -109,9 +109,9 @@ class _HomeTabState extends State<HomeTab> {
                 builder: (ctrl) => Container(
                   height: 40.0,
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: ctrl.isLoading.isFalse
+                  child: !ctrl.isCategoryLoading
                       ? ListView.separated(
-                          scrollDirection: Axis.horizontal,
+                    scrollDirection: Axis.horizontal,
                           itemBuilder: (_, index) => CategoryTile(
                             category: ctrl.categories[index].title,
                             isSelected:
@@ -146,7 +146,7 @@ class _HomeTabState extends State<HomeTab> {
               ),
               GetBuilder<HomeController>(
                 builder: (ctrl) => Expanded(
-                  child: ctrl.isLoading.isFalse
+                  child: !ctrl.isProductLoading
                       ? GridView.builder(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 16.0, vertical: 8.0),
@@ -158,10 +158,16 @@ class _HomeTabState extends State<HomeTab> {
                             mainAxisSpacing: 10,
                             childAspectRatio: 9 / 11.5,
                           ),
-                          itemCount: mock.items.length,
+                          itemCount: ctrl.products.length,
                           itemBuilder: (_, index) {
+                            if((index + 1) == ctrl.products.length){
+                              if(!ctrl.isLastPage) {
+                                ctrl.loadMoreProducts();
+                              }
+                            }
+
                             return ItemTile(
-                              item: mock.items[index],
+                              item: ctrl.products[index],
                               cartAnimationMethod: itemSelectedCartAnimations,
                             );
                           },
