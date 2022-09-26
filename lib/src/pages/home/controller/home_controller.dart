@@ -9,6 +9,8 @@ const int itemsPerPage = 6;
 class HomeController extends GetxController {
   final _homeRepository = HomeRepository();
 
+  RxString searchTitle = ''.obs;
+
   bool isCategoryLoading = false;
 
   bool isProductLoading = false;
@@ -29,6 +31,12 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+
+    debounce(
+      searchTitle,
+      (_) => filterByTitle(),
+      time: const Duration(milliseconds: 600),
+    );
 
     // Inicia com efeito loading para os produtos enquanto as categorias são carregadas.
     setProductLoading(true);
@@ -62,6 +70,43 @@ class HomeController extends GetxController {
     getProductList(loadingEffect: false);
   }
 
+  void filterByTitle() {
+    // apagar todos os produtos das categorias.
+    for (var cat in categories) {
+      cat.items.clear();
+      cat.pagination = 0;
+    }
+
+    if (searchTitle.value.isEmpty) {
+      categories.removeAt(0);
+    } else {
+      final categoryExists =
+          categories.firstWhereOrNull((element) => element.id == '');
+
+      if (categoryExists == null) {
+        final allCategory = CategoryModel(
+          id: '',
+          title: 'Todos',
+          items: [],
+          pagination: 0,
+        );
+
+        categories.insert(0, allCategory);
+      } else {
+        // Todos já existe, então limpa os itens da pesquisa.
+        categoryExists.items.clear();
+        categoryExists.pagination = 0;
+      }
+    }
+
+    // Define a categoria atual como a primera 'Todos'.
+    currentCategory = categories.first;
+
+    update();
+
+    getProductList();
+  }
+
   Future<void> getCategoryList() async {
     setCategoryLoading(true);
     final result = await _homeRepository.getCategoryList();
@@ -92,7 +137,13 @@ class HomeController extends GetxController {
       'categoryId': currentCategory!.id,
       'itemsPerPage': itemsPerPage,
     };
-
+    if (searchTitle.value.isNotEmpty) {
+      body['title'] = searchTitle.value;
+      if (currentCategory!.id == '') {
+        // se a categoria atual for a 'Todos', remove a filtragem por categoria da requisição.
+        body.remove('categoryId');
+      }
+    }
     final result = await _homeRepository.getProductList(body);
     setProductLoading(false);
     result.when(

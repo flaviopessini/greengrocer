@@ -19,17 +19,14 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<HomeTab> {
-  GlobalKey<CartIconKey> globalKeyCartItems = GlobalKey<CartIconKey>();
+  final GlobalKey<CartIconKey> globalKeyCartItems = GlobalKey<CartIconKey>();
+
+  final TextEditingController searchController = TextEditingController();
 
   late Function(GlobalKey) runAddToCartAnimation;
 
   void itemSelectedCartAnimations(GlobalKey gkImage) {
     runAddToCartAnimation(gkImage);
-  }
-
-  @override
-  void initState() {
-    super.initState();
   }
 
   @override
@@ -77,29 +74,51 @@ class _HomeTabState extends State<HomeTab> {
           },
           child: Column(
             children: [
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.white,
-                    isDense: true,
-                    hintText: 'Pesquisar...',
-                    hintStyle: TextStyle(
-                      color: Colors.grey.shade400,
-                      fontSize: 14,
-                    ),
-                    prefixIcon: Icon(
-                      Icons.search_rounded,
-                      color: CustomColors.customContrastColor,
-                      size: 24.0,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(60.0),
-                      borderSide: const BorderSide(
-                        width: 0,
-                        style: BorderStyle.none,
+              GetBuilder<HomeController>(
+                builder: (ctrl) => Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 8.0),
+                  child: TextFormField(
+                    controller: searchController,
+                    onChanged: (value) {
+                      if (value.isNotEmpty) {
+                        ctrl.searchTitle.value = value;
+                      }
+                    },
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      isDense: true,
+                      hintText: 'Pesquisar...',
+                      hintStyle: TextStyle(
+                        color: Colors.grey.shade400,
+                        fontSize: 14,
+                      ),
+                      prefixIcon: Icon(
+                        Icons.search_rounded,
+                        color: CustomColors.customContrastColor,
+                        size: 24.0,
+                      ),
+                      suffixIcon: ctrl.searchTitle.value.isNotEmpty
+                          ? IconButton(
+                              onPressed: () {
+                                FocusScope.of(context).unfocus();
+                                searchController.clear();
+                                ctrl.searchTitle.value = '';
+                              },
+                              icon: Icon(
+                                Icons.clear_rounded,
+                                color: CustomColors.customContrastColor,
+                                size: 20.0,
+                              ),
+                            )
+                          : null,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(60.0),
+                        borderSide: const BorderSide(
+                          width: 0,
+                          style: BorderStyle.none,
+                        ),
                       ),
                     ),
                   ),
@@ -111,7 +130,7 @@ class _HomeTabState extends State<HomeTab> {
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: !ctrl.isCategoryLoading
                       ? ListView.separated(
-                    scrollDirection: Axis.horizontal,
+                          scrollDirection: Axis.horizontal,
                           itemBuilder: (_, index) => CategoryTile(
                             category: ctrl.categories[index].title,
                             isSelected:
@@ -147,30 +166,52 @@ class _HomeTabState extends State<HomeTab> {
               GetBuilder<HomeController>(
                 builder: (ctrl) => Expanded(
                   child: !ctrl.isProductLoading
-                      ? GridView.builder(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16.0, vertical: 8.0),
-                          physics: const BouncingScrollPhysics(),
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 10,
-                            mainAxisSpacing: 10,
-                            childAspectRatio: 9 / 11.5,
+                      ? Visibility(
+                          visible:
+                              (ctrl.currentCategory?.items ?? []).isNotEmpty,
+                          replacement: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 48.0, horizontal: 16.0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.search_off_rounded,
+                                  size: 56.0,
+                                  color: CustomColors.customSwatchColor,
+                                ),
+                                const Text(
+                                  'Não foram encontrados produtos com o nome informado para esta categoria',
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
                           ),
-                          itemCount: ctrl.products.length,
-                          itemBuilder: (_, index) {
-                            if((index + 1) == ctrl.products.length){
-                              if(!ctrl.isLastPage) {
-                                ctrl.loadMoreProducts();
+                          child: GridView.builder(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16.0, vertical: 8.0),
+                            physics: const BouncingScrollPhysics(),
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 10,
+                              mainAxisSpacing: 10,
+                              childAspectRatio: 9 / 11.5,
+                            ),
+                            itemCount: ctrl.products.length,
+                            itemBuilder: (_, index) {
+                              if ((index + 1) == ctrl.products.length) {
+                                if (!ctrl.isLastPage) {
+                                  ctrl.loadMoreProducts();
+                                }
                               }
-                            }
 
-                            return ItemTile(
-                              item: ctrl.products[index],
-                              cartAnimationMethod: itemSelectedCartAnimations,
-                            );
-                          },
+                              return ItemTile(
+                                item: ctrl.products[index],
+                                cartAnimationMethod: itemSelectedCartAnimations,
+                              );
+                            },
+                          ),
                         )
                       : GridView.count(
                           padding: const EdgeInsets.symmetric(
