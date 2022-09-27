@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:greengrocer/src/configs/custom_colors.dart';
 import 'package:greengrocer/src/models/item_model.dart';
+import 'package:greengrocer/src/pages/base/controller/navigation_controller.dart';
+import 'package:greengrocer/src/pages/base/navigation/navigation_tabs.dart';
 import 'package:greengrocer/src/pages/common_widgets/quantity_widget.dart';
 import 'package:greengrocer/src/services/utils_services.dart';
 
@@ -17,6 +20,8 @@ class ProductScreen extends StatefulWidget {
 }
 
 class _ProductScreenState extends State<ProductScreen> {
+  final navigationController = Get.find<NavigationController>();
+
   int itemQuantity = 1;
 
   @override
@@ -108,7 +113,10 @@ class _ProductScreenState extends State<ProductScreen> {
                               borderRadius: BorderRadius.circular(14.0),
                             ),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            Get.back();
+                            navigationController.navigatePageView(NavigationTabs.cart);
+                          },
                           icon: const Icon(Icons.add_shopping_cart_rounded),
                           label: Text(
                             'adicionar',
