@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:greengrocer/src/pages/auth/controllers/auth_controller.dart';
-import 'package:greengrocer/src/pages/cart/components/custom_text_field.dart';
+import 'package:greengrocer/src/pages/cart/views/components/custom_text_field.dart';
 import 'package:greengrocer/src/services/validators.dart';
 
 class ForgotPasswordDialog extends StatelessWidget {
