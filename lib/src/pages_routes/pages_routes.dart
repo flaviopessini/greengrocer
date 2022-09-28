@@ -10,4 +10,7 @@ abstract class PagesRoutes {
 
   /// Rota **'/base'**
   static const String baseRoute = '/base';
+
+  /// Rota **'/product'**
+  static const String productRoute = '/product';
 }

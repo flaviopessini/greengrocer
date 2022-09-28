@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:greengrocer/src/configs/app_data.dart' as mock;
 import 'package:greengrocer/src/configs/custom_colors.dart';
-import 'package:greengrocer/src/models/cart_item_model.dart';
-import 'package:greengrocer/src/pages/cart/components/cart_tile.dart';
+import 'package:greengrocer/src/pages/cart/controller/cart_controller.dart';
+import 'package:greengrocer/src/pages/cart/views/components/cart_tile.dart';
 import 'package:greengrocer/src/pages/common_widgets/payment_dialog.dart';
 import 'package:greengrocer/src/services/utils_services.dart';
 
@@ -24,18 +25,19 @@ class _CartTabState extends State<CartTab> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
-            child: ListView.builder(
-              scrollDirection: Axis.vertical,
-              itemCount: mock.cartItems.length,
-              itemBuilder: (ctx, index) => CartTile(
-                cartItem: mock.cartItems[index],
-                remove: removeCartItem,
+            child: GetBuilder<CartController>(
+              builder: (ctrl) => ListView.builder(
+                scrollDirection: Axis.vertical,
+                itemCount: ctrl.cartItems.length,
+                itemBuilder: (ctx, index) => CartTile(
+                  cartItem: ctrl.cartItems[index],
+                ),
               ),
             ),
           ),
           const SizedBox(height: 16.0),
           Container(
-            padding: const EdgeInsets.all(32.0),
+            padding: const EdgeInsets.all(16.0),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: const BorderRadius.vertical(
@@ -52,19 +54,26 @@ class _CartTabState extends State<CartTab> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const Text(
-                  'Total do carrinho',
-                  style: TextStyle(
-                    fontSize: 16.0,
-                  ),
-                ),
-                Text(
-                  UtilsServices.priceToCurrency(cartTotalPrice()),
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: CustomColors.customSwatchColor,
-                    fontSize: 24.0,
-                  ),
+                Row(
+                  children: [
+                    const Text(
+                      'Total do carrinho: ',
+                      style: TextStyle(
+                        fontSize: 16.0,
+                      ),
+                    ),
+                    const SizedBox(width: 8.0),
+                    GetBuilder<CartController>(
+                      builder: (ctrl) => Text(
+                        UtilsServices.priceToCurrency(ctrl.cartTotalPrice()),
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: CustomColors.customSwatchColor,
+                          fontSize: 24.0,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 16.0),
                 SizedBox(
@@ -108,21 +117,6 @@ class _CartTabState extends State<CartTab> {
         ],
       ),
     );
-  }
-
-  double cartTotalPrice() {
-    double total = 0;
-    for (var item in mock.cartItems) {
-      total += item.totalPrice();
-    }
-    return total;
-  }
-
-  void removeCartItem(CartItemModel cartItem) {
-    setState(() {
-      mock.cartItems.remove(cartItem);
-    });
-    UtilsServices.showToast(message: 'Item removido do carrinho');
   }
 
   Future<bool?> showOrderConfirmation() {

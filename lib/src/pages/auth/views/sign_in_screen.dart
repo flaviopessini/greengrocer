@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:greengrocer/src/configs/custom_colors.dart';
 import 'package:greengrocer/src/pages/auth/controllers/auth_controller.dart';
 import 'package:greengrocer/src/pages/auth/views/components/forgot_password_dialog.dart';
-import 'package:greengrocer/src/pages/cart/components/custom_text_field.dart';
+import 'package:greengrocer/src/pages/cart/views/components/custom_text_field.dart';
 import 'package:greengrocer/src/pages/common_widgets/app_name_widget.dart';
 import 'package:greengrocer/src/pages_routes/pages_routes.dart';
 import 'package:greengrocer/src/services/utils_services.dart';
