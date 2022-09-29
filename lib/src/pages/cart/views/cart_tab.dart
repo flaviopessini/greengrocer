@@ -26,13 +26,26 @@ class _CartTabState extends State<CartTab> {
         children: [
           Expanded(
             child: GetBuilder<CartController>(
-              builder: (ctrl) => ListView.builder(
-                scrollDirection: Axis.vertical,
-                itemCount: ctrl.cartItems.length,
-                itemBuilder: (ctx, index) => CartTile(
-                  cartItem: ctrl.cartItems[index],
-                ),
-              ),
+              builder: (ctrl) => ctrl.cartItems.isEmpty
+                  ? Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.remove_shopping_cart_outlined,
+                          size: 40.0,
+                          color: CustomColors.customSwatchColor,
+                        ),
+                        const SizedBox(height: 32.0),
+                        const Text('Não há itens no carrinho'),
+                      ],
+                    )
+                  : ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      itemCount: ctrl.cartItems.length,
+                      itemBuilder: (ctx, index) => CartTile(
+                        cartItem: ctrl.cartItems[index],
+                      ),
+                    ),
             ),
           ),
           const SizedBox(height: 16.0),

@@ -30,23 +30,28 @@ class CartController extends GetxController {
     return total;
   }
 
+  // Retorna a quantidade total unitária de itens no carrinho.
+  int getCartTotalItems() {
+    // Mapear a lista de itens do carrinho e criar uma nova lista contendo
+    // a quantidade de cada item do carrinho. Com o 'reduce' somamos todas as
+    // quantidades e retornamos o resultado.
+    return cartItems.isEmpty
+        ? 0
+        : cartItems
+            .map((e) => e.quantity)
+            .reduce((a, b) => a + b);
+  }
+
   Future<void> addItemToCart(
       {required ItemModel item, int quantity = 1}) async {
     int index = getItemIndex(item);
     if (index >= 0) {
       // Já existe na lista
       final product = cartItems[index];
-      final result = await changeItemQuantity(
+      await changeItemQuantity(
         item: product,
         quantity: (product.quantity + quantity),
       );
-      if (result) {
-        cartItems[index].quantity += quantity;
-      } else {
-        UtilsServices.showToast(
-            message: 'Ocorreu um erro ao alterar a quantidade do produto',
-            isError: true);
-      }
     } else {
       final result = await cartRepository.addItemToCart(
         userId: authController.user.id!,
@@ -80,6 +85,20 @@ class CartController extends GetxController {
       quantity: quantity,
       token: authController.user.token!,
     );
+    if (result) {
+      if (quantity == 0) {
+        cartItems.removeWhere((element) => element.id == item.id);
+      } else {
+        cartItems.firstWhere((element) => element.id == item.id).quantity =
+            quantity;
+      }
+
+      update();
+    } else {
+      UtilsServices.showToast(
+          message: 'Ocorreu um erro ao alterar a quantidade do produto',
+          isError: true);
+    }
     return result;
   }
 
