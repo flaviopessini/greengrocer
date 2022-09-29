@@ -1,13 +1,17 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:greengrocer/src/models/cart_item_model.dart';
 import 'package:greengrocer/src/models/item_model.dart';
 import 'package:greengrocer/src/pages/auth/controllers/auth_controller.dart';
 import 'package:greengrocer/src/pages/cart/repo/cart_repository.dart';
+import 'package:greengrocer/src/pages/common_widgets/payment_dialog.dart';
 import 'package:greengrocer/src/services/utils_services.dart';
 
 class CartController extends GetxController {
   final cartRepository = CartRepository();
   final authController = Get.find<AuthController>();
+
+  bool isCheckoutLoading = false;
 
   List<CartItemModel> cartItems = [];
 
@@ -20,6 +24,11 @@ class CartController extends GetxController {
 
   int getItemIndex(ItemModel item) {
     return cartItems.indexWhere((element) => element.item.id == item.id);
+  }
+
+  void setCheckoutLoading(bool loading) {
+    isCheckoutLoading = loading;
+    update();
   }
 
   double cartTotalPrice() {
@@ -37,9 +46,7 @@ class CartController extends GetxController {
     // quantidades e retornamos o resultado.
     return cartItems.isEmpty
         ? 0
-        : cartItems
-            .map((e) => e.quantity)
-            .reduce((a, b) => a + b);
+        : cartItems.map((e) => e.quantity).reduce((a, b) => a + b);
   }
 
   Future<void> addItemToCart(
@@ -112,6 +119,28 @@ class CartController extends GetxController {
       success: (data) {
         cartItems.assignAll(data);
         update();
+      },
+      error: (message) {
+        UtilsServices.showToast(message: message, isError: true);
+      },
+    );
+  }
+
+  Future checkoutCart() async {
+    setCheckoutLoading(true);
+    final result = await cartRepository.checkoutCart(
+      token: authController.user.token!,
+      total: cartTotalPrice(),
+    );
+    setCheckoutLoading(false);
+    result.when(
+      success: (data) {
+        cartItems.clear();
+        update();
+        showDialog(
+          context: Get.context!,
+          builder: (_) => PaymentDialog(order: data),
+        );
       },
       error: (message) {
         UtilsServices.showToast(message: message, isError: true);

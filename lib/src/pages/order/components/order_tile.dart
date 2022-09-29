@@ -28,7 +28,7 @@ class OrderTile extends StatelessWidget {
         child: ExpansionTile(
           title: Text('Pedido: ${order.id}'),
           subtitle: Text(
-            UtilsServices.formatDateTime(order.createdDateTime),
+            UtilsServices.formatDateTime(order.createdDateTime!),
             style: TextStyle(
               color: Colors.grey.shade700,
             ),

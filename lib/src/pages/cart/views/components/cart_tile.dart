@@ -52,7 +52,8 @@ class _CartTileState extends State<CartTile> {
           suffixText: widget.cartItem.item.unit,
           isRemovable: true,
           result: (int quantity) {
-            cartController.changeItemQuantity(item: widget.cartItem, quantity: quantity);
+            cartController.changeItemQuantity(
+                item: widget.cartItem, quantity: quantity);
           },
         ),
       ),

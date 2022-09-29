@@ -1,4 +1,3 @@
-import 'package:greengrocer/src/models/cart_item_model.dart';
 import 'package:greengrocer/src/models/item_model.dart';
 import 'package:greengrocer/src/models/order_model.dart';
 import 'package:greengrocer/src/models/user_model.dart';
@@ -94,126 +93,126 @@ UserModel user = UserModel(
 
 List<OrderModel> orders = [
   // Pedido 01
-  OrderModel(
-    copyAndPaste: 'q1w2e3r4t5y6',
-    createdDateTime: DateTime.parse(
-      '2022-10-08 10:00:10.458',
-    ),
-    overdueDateTime: DateTime.parse(
-      '2022-10-08 11:00:10.458',
-    ),
-    id: 'asd6a54da6s2d1',
-    status: 'refunded',
-    total: 11.0,
-    items: [
-      // CartItemModel(
-      //   item: apple,
-      //   quantity: 2,
-      // ),
-      // CartItemModel(
-      //   item: mango,
-      //   quantity: 2,
-      // ),
-    ],
-  ),
+  // OrderModel(
+  //   copyAndPaste: 'q1w2e3r4t5y6',
+  //   createdDateTime: DateTime.parse(
+  //     '2022-10-08 10:00:10.458',
+  //   ),
+  //   overdueDateTime: DateTime.parse(
+  //     '2022-10-08 11:00:10.458',
+  //   ),
+  //   id: 'asd6a54da6s2d1',
+  //   status: 'refunded',
+  //   total: 11.0,
+  //   items: [
+  //     // CartItemModel(
+  //     //   item: apple,
+  //     //   quantity: 2,
+  //     // ),
+  //     // CartItemModel(
+  //     //   item: mango,
+  //     //   quantity: 2,
+  //     // ),
+  //   ],
+  // ),
 
   // Pedido 02
-  OrderModel(
-    copyAndPaste: 'q1w2e3r4t5y6',
-    createdDateTime: DateTime.parse(
-      '2022-10-08 10:00:10.458',
-    ),
-    overdueDateTime: DateTime.parse(
-      '2022-10-08 11:00:10.458',
-    ),
-    id: 'a65s4d6a2s1d6a5s',
-    status: 'pending_payment',
-    total: 11.5,
-    items: [
-      // CartItemModel(
-      //   item: guava,
-      //   quantity: 1,
-      // ),
-    ],
-  ),
+  // OrderModel(
+  //   copyAndPaste: 'q1w2e3r4t5y6',
+  //   createdDateTime: DateTime.parse(
+  //     '2022-10-08 10:00:10.458',
+  //   ),
+  //   overdueDateTime: DateTime.parse(
+  //     '2022-10-08 11:00:10.458',
+  //   ),
+  //   id: 'a65s4d6a2s1d6a5s',
+  //   status: 'pending_payment',
+  //   total: 11.5,
+  //   items: [
+  //     // CartItemModel(
+  //     //   item: guava,
+  //     //   quantity: 1,
+  //     // ),
+  //   ],
+  // ),
 
   // Pedido 03
-  OrderModel(
-    copyAndPaste: 'a2b2e3r45go9',
-    createdDateTime: DateTime.parse(
-      '2022-10-08 10:00:10.458',
-    ),
-    overdueDateTime: DateTime.parse(
-      '2022-10-08 11:00:10.458',
-    ),
-    id: 'a65s4d6a2s1d6a5s',
-    status: 'paid',
-    total: 11.5,
-    items: [
-      // CartItemModel(
-      //   item: guava,
-      //   quantity: 1,
-      // ),
-    ],
-  ),
+  // OrderModel(
+  //   copyAndPaste: 'a2b2e3r45go9',
+  //   createdDateTime: DateTime.parse(
+  //     '2022-10-08 10:00:10.458',
+  //   ),
+  //   overdueDateTime: DateTime.parse(
+  //     '2022-10-08 11:00:10.458',
+  //   ),
+  //   id: 'a65s4d6a2s1d6a5s',
+  //   status: 'paid',
+  //   total: 11.5,
+  //   items: [
+  //     // CartItemModel(
+  //     //   item: guava,
+  //     //   quantity: 1,
+  //     // ),
+  //   ],
+  // ),
 
   // Pedido 04
-  OrderModel(
-    copyAndPaste: 't442e3r4u890',
-    createdDateTime: DateTime.parse(
-      '2022-10-08 10:00:10.458',
-    ),
-    overdueDateTime: DateTime.parse(
-      '2022-10-08 11:00:10.458',
-    ),
-    id: 'a65s4d6a2s1d6a5s',
-    status: 'preparing_purchase',
-    total: 11.5,
-    items: [
-      // CartItemModel(
-      //   item: guava,
-      //   quantity: 1,
-      // ),
-    ],
-  ),
+  // OrderModel(
+  //   copyAndPaste: 't442e3r4u890',
+  //   createdDateTime: DateTime.parse(
+  //     '2022-10-08 10:00:10.458',
+  //   ),
+  //   overdueDateTime: DateTime.parse(
+  //     '2022-10-08 11:00:10.458',
+  //   ),
+  //   id: 'a65s4d6a2s1d6a5s',
+  //   status: 'preparing_purchase',
+  //   total: 11.5,
+  //   items: [
+  //     // CartItemModel(
+  //     //   item: guava,
+  //     //   quantity: 1,
+  //     // ),
+  //   ],
+  // ),
 
   // Pedido 04
-  OrderModel(
-    copyAndPaste: 'j873h4r4u876',
-    createdDateTime: DateTime.parse(
-      '2022-10-08 10:00:10.458',
-    ),
-    overdueDateTime: DateTime.parse(
-      '2022-10-08 11:00:10.458',
-    ),
-    id: 'a65s4d6a2s1d6a5s',
-    status: 'shipping',
-    total: 11.5,
-    items: [
-      // CartItemModel(
-      //   item: guava,
-      //   quantity: 1,
-      // ),
-    ],
-  ),
+  // OrderModel(
+  //   copyAndPaste: 'j873h4r4u876',
+  //   createdDateTime: DateTime.parse(
+  //     '2022-10-08 10:00:10.458',
+  //   ),
+  //   overdueDateTime: DateTime.parse(
+  //     '2022-10-08 11:00:10.458',
+  //   ),
+  //   id: 'a65s4d6a2s1d6a5s',
+  //   status: 'shipping',
+  //   total: 11.5,
+  //   items: [
+  //     // CartItemModel(
+  //     //   item: guava,
+  //     //   quantity: 1,
+  //     // ),
+  //   ],
+  // ),
 
   // Pedido 05
-  OrderModel(
-    copyAndPaste: 'f4k3h8j4u0pl',
-    createdDateTime: DateTime.parse(
-      '2022-10-08 10:00:10.458',
-    ),
-    overdueDateTime: DateTime.parse(
-      '2022-10-08 11:00:10.458',
-    ),
-    id: 'a65s4d6a2s1d6a5s',
-    status: 'delivered',
-    total: 11.5,
-    items: [
-      // CartItemModel(
-      //   item: guava,
-      //   quantity: 1,
-      // ),
-    ],
-  ),
+  // OrderModel(
+  //   copyAndPaste: 'f4k3h8j4u0pl',
+  //   createdDateTime: DateTime.parse(
+  //     '2022-10-08 10:00:10.458',
+  //   ),
+  //   overdueDateTime: DateTime.parse(
+  //     '2022-10-08 11:00:10.458',
+  //   ),
+  //   id: 'a65s4d6a2s1d6a5s',
+  //   status: 'delivered',
+  //   total: 11.5,
+  //   items: [
+  //     // CartItemModel(
+  //     //   item: guava,
+  //     //   quantity: 1,
+  //     // ),
+  //   ],
+  // ),
 ];

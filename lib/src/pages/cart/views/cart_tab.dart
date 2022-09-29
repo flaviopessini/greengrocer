@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:greengrocer/src/configs/app_data.dart' as mock;
 import 'package:greengrocer/src/configs/custom_colors.dart';
 import 'package:greengrocer/src/pages/cart/controller/cart_controller.dart';
 import 'package:greengrocer/src/pages/cart/views/components/cart_tile.dart';
-import 'package:greengrocer/src/pages/common_widgets/payment_dialog.dart';
 import 'package:greengrocer/src/services/utils_services.dart';
 
 class CartTab extends StatefulWidget {
@@ -15,6 +13,8 @@ class CartTab extends StatefulWidget {
 }
 
 class _CartTabState extends State<CartTab> {
+  final cartController = Get.find<CartController>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -91,36 +91,38 @@ class _CartTabState extends State<CartTab> {
                 const SizedBox(height: 16.0),
                 SizedBox(
                   height: 48.0,
-                  child: ElevatedButton.icon(
-                    onPressed: () async {
-                      bool? result = await showOrderConfirmation();
+                  child: GetBuilder<CartController>(
+                    builder: (ctrl) => ElevatedButton.icon(
+                      onPressed: ctrl.isCheckoutLoading
+                          ? null
+                          : () async {
+                              bool? result = await showOrderConfirmation();
 
-                      if (result ?? false) {
-                        showDialog(
-                          context: context,
-                          builder: (_) =>
-                              PaymentDialog(order: mock.orders.first),
-                        );
-                      } else {
-                        UtilsServices.showToast(
-                          message: 'Pedido não confirmado',
-                          isError: true,
-                        );
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(14.0),
+                              if (result ?? false) {
+                                cartController.checkoutCart();
+                              } else {
+                                UtilsServices.showToast(
+                                    message: 'Pedido não confirmado');
+                              }
+                            },
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14.0),
+                        ),
+                        backgroundColor: CustomColors.customSwatchColor,
                       ),
-                      backgroundColor: CustomColors.customSwatchColor,
-                    ),
-                    icon: const Icon(Icons.shopping_cart_checkout_rounded),
-                    label: Text(
-                      'finalizar pedido',
-                      style: TextStyle(
-                        fontSize:
-                            Theme.of(context).textTheme.titleLarge!.fontSize,
-                      ),
+                      icon: const Icon(Icons.shopping_cart_checkout_rounded),
+                      label: ctrl.isCheckoutLoading
+                          ? const CircularProgressIndicator()
+                          : Text(
+                              'finalizar pedido',
+                              style: TextStyle(
+                                fontSize: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge!
+                                    .fontSize,
+                              ),
+                            ),
                     ),
                   ),
                 )

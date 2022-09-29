@@ -47,7 +47,7 @@ class _HomeTabState extends State<HomeTab> {
           Padding(
             padding: const EdgeInsets.only(top: 15, right: 15),
             child: GetBuilder<CartController>(
-              builder: (ctrl)=>GestureDetector(
+              builder: (ctrl) => GestureDetector(
                 onTap: () {
                   navigationController.navigatePageView(NavigationTabs.cart);
                 },

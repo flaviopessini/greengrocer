@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -52,9 +55,15 @@ abstract class UtilsServices {
       toastLength: Toast.LENGTH_LONG,
       gravity: ToastGravity.BOTTOM,
       timeInSecForIosWeb: 3,
-      backgroundColor: isError ? Colors.redAccent : Colors.greenAccent,
-      textColor: Colors.black,
+      backgroundColor: isError ? Colors.red.shade800 : Colors.green.shade800,
+      textColor: Colors.white,
       fontSize: 16.0,
     );
+  }
+
+  static Uint8List showQrCodeImage(String data) {
+    String base64String = data.split(',').last;
+
+    return base64Decode(base64String);
   }
 }

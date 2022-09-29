@@ -1,7 +1,7 @@
+import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:greengrocer/src/models/order_model.dart';
 import 'package:greengrocer/src/services/utils_services.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 
 class PaymentDialog extends StatelessWidget {
   final OrderModel order;
@@ -40,10 +40,10 @@ class PaymentDialog extends StatelessWidget {
                         ),
                       ),
                     ),
-                    QrImage(
-                      data: 'flaviohenriquepessini',
-                      size: 200.0,
-                      version: QrVersions.auto,
+                    Image.memory(
+                      UtilsServices.showQrCodeImage(order.qrCodeImage),
+                      height: 200.0,
+                      width: 200.0,
                     ),
                     const SizedBox(height: 8.0),
                     Text(
@@ -64,9 +64,8 @@ class PaymentDialog extends StatelessWidget {
                     ),
                     OutlinedButton.icon(
                       onPressed: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Copiado')),
-                        );
+                        FlutterClipboard.copy(order.copyAndPaste);
+                        UtilsServices.showToast(message: 'Copiado!');
                       },
                       icon: const Icon(Icons.copy_rounded),
                       label: const Text('Copiar código Pix'),

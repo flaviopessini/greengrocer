@@ -21,7 +21,8 @@ class AuthController extends GetxController {
   }
 
   Future<void> saveTokenAndGoToBase() async {
-    await UtilsServices.saveLocalData(key: StorageKeys.token, value: user.token!);
+    await UtilsServices.saveLocalData(
+        key: StorageKeys.token, value: user.token!);
     Get.offAllNamed(PagesRoutes.baseRoute);
   }
 

@@ -5,7 +5,6 @@ part 'cart_item_model.g.dart';
 
 @JsonSerializable()
 class CartItemModel {
-
   @JsonKey(name: 'product')
   ItemModel item;
 
@@ -21,7 +20,8 @@ class CartItemModel {
 
   double totalPrice() => item.price * quantity;
 
-  factory CartItemModel.fromJson(Map<String, dynamic> json) => _$CartItemModelFromJson(json);
+  factory CartItemModel.fromJson(Map<String, dynamic> json) =>
+      _$CartItemModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$CartItemModelToJson(this);
 
