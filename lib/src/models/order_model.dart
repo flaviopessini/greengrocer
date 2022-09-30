@@ -25,6 +25,8 @@ class OrderModel {
 
   double total;
 
+  bool get isOverDue => overdueDateTime.isBefore(DateTime.now());
+
   OrderModel({
     required this.id,
     required this.items,
