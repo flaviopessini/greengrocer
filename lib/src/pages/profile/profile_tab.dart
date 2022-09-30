@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:greengrocer/src/configs/app_data.dart' as mock;
 import 'package:greengrocer/src/pages/auth/controllers/auth_controller.dart';
 import 'package:greengrocer/src/pages/cart/views/components/custom_text_field.dart';
 import 'package:greengrocer/src/services/utils_services.dart';
+import 'package:greengrocer/src/services/validators.dart';
 
 class ProfileTab extends StatefulWidget {
   const ProfileTab({Key? key}) : super(key: key);
@@ -17,8 +17,6 @@ class _ProfileTabState extends State<ProfileTab> {
 
   @override
   Widget build(BuildContext context) {
-    final user = mock.user;
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profile'),
@@ -36,14 +34,14 @@ class _ProfileTabState extends State<ProfileTab> {
         shrinkWrap: true,
         children: [
           CustomTextField(
-            initialValue: user.name,
+            initialValue: authController.user.name,
             leftIcon: Icons.person_rounded,
             label: 'Nome',
             inputType: TextInputType.name,
           ),
           const SizedBox(height: 16.0),
           CustomTextField(
-            initialValue: user.email,
+            initialValue: authController.user.email,
             readOnly: true,
             leftIcon: Icons.email_rounded,
             label: 'E-mail',
@@ -51,7 +49,7 @@ class _ProfileTabState extends State<ProfileTab> {
           ),
           const SizedBox(height: 16.0),
           CustomTextField(
-            initialValue: user.phone,
+            initialValue: authController.user.phone,
             leftIcon: Icons.phone_android_rounded,
             label: 'Celular',
             inputType: TextInputType.phone,
@@ -59,7 +57,7 @@ class _ProfileTabState extends State<ProfileTab> {
           ),
           const SizedBox(height: 16.0),
           CustomTextField(
-            initialValue: user.cpf,
+            initialValue: authController.user.cpf,
             readOnly: true,
             leftIcon: Icons.password_rounded,
             label: 'CPF',
@@ -103,23 +101,29 @@ class _ProfileTabState extends State<ProfileTab> {
   }
 
   Future<bool?> updatePassword() {
+    final passwordController = TextEditingController();
+    final currentPasswordController = TextEditingController();
+    final formKey = GlobalKey<FormState>();
+
     return showDialog<bool>(
-        barrierDismissible: false,
-        context: context,
-        builder: (ctx) {
-          return Center(
-            child: SingleChildScrollView(
-              child: Dialog(
-                elevation: 5,
-                alignment: Alignment.center,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                clipBehavior: Clip.antiAlias,
-                child: Stack(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
+      barrierDismissible: false,
+      context: context,
+      builder: (ctx) {
+        return Center(
+          child: SingleChildScrollView(
+            child: Dialog(
+              elevation: 5,
+              alignment: Alignment.center,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              clipBehavior: Clip.antiAlias,
+              child: Stack(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Form(
+                      key: formKey,
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -133,60 +137,97 @@ class _ProfileTabState extends State<ProfileTab> {
                             textAlign: TextAlign.center,
                           ),
                           const SizedBox(height: 16.0),
-                          const CustomTextField(
+                          CustomTextField(
+                            controller: currentPasswordController,
                             label: 'Senha atual',
                             isSecret: true,
                             leftIcon: Icons.lock_rounded,
+                            validator: passwordValidator,
                           ),
                           const SizedBox(height: 8.0),
-                          const CustomTextField(
+                          CustomTextField(
+                            controller: passwordController,
                             label: 'Nova senha',
                             isSecret: true,
                             leftIcon: Icons.lock_outline_rounded,
+                            validator: passwordValidator,
                           ),
                           const SizedBox(height: 8.0),
-                          const CustomTextField(
+                          CustomTextField(
                             label: 'Confirmar senha',
                             isSecret: true,
                             leftIcon: Icons.lock_outline_rounded,
+                            validator: (password) {
+                              final result = passwordValidator(password);
+                              if (result != null) {
+                                return result;
+                              }
+                              if (password != passwordController.text) {
+                                return 'As senhas não combinam';
+                              }
+                              return null;
+                            },
                           ),
                           const SizedBox(height: 32.0),
                           SizedBox(
                             height: 48.0,
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(14.0),
+                            child: Obx(
+                              () => ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(14.0),
+                                  ),
                                 ),
-                              ),
-                              onPressed: () {},
-                              child: Text(
-                                'Alterar',
-                                style: TextStyle(
-                                  fontSize: Theme.of(context)
-                                      .textTheme
-                                      .titleLarge!
-                                      .fontSize,
-                                ),
+                                onPressed: authController.isLoading.value
+                                    ? null
+                                    : () {
+                                        // Não funciona.
+                                        // FocusScope.of(context).unfocus();
+
+                                        Get.focusScope?.unfocus();
+
+                                        if (formKey.currentState!.validate()) {
+                                          authController.changePassword(
+                                            currentPassword:
+                                                currentPasswordController.text
+                                                    .trim(),
+                                            newPassword:
+                                                passwordController.text.trim(),
+                                          );
+                                        }
+                                      },
+                                child: authController.isLoading.value
+                                    ? const CircularProgressIndicator()
+                                    : Text(
+                                        'Alterar',
+                                        style: TextStyle(
+                                          fontSize: Theme.of(context)
+                                              .textTheme
+                                              .titleLarge!
+                                              .fontSize,
+                                        ),
+                                      ),
                               ),
                             ),
                           ),
                         ],
                       ),
                     ),
-                    Positioned(
-                      top: 5,
-                      right: 5,
-                      child: IconButton(
-                        onPressed: () => Navigator.of(context).pop(false),
-                        icon: const Icon(Icons.close),
-                      ),
+                  ),
+                  Positioned(
+                    top: 5,
+                    right: 5,
+                    child: IconButton(
+                      onPressed: () => Navigator.of(context).pop(false),
+                      icon: const Icon(Icons.close),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-          );
-        });
+          ),
+        );
+      },
+    );
   }
 }
