@@ -11,7 +11,7 @@ class AllOrderController extends GetxController {
   List<OrderModel> allOrders = [];
 
   @override
-  void onInit(){
+  void onInit() {
     super.onInit();
 
     getAllOrders();
@@ -24,7 +24,10 @@ class AllOrderController extends GetxController {
     );
     result.when(
       success: (orders) {
-        allOrders.assignAll(orders);
+        allOrders.assignAll(
+          orders
+            ..sort((a, b) => b.createdDateTime!.compareTo(a.createdDateTime!)),
+        );
         update();
       },
       error: (message) {
