@@ -3,7 +3,6 @@ import 'package:add_to_cart_animation/add_to_cart_icon.dart';
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:greengrocer/src/configs/app_data.dart' as mock;
 import 'package:greengrocer/src/configs/custom_colors.dart';
 import 'package:greengrocer/src/pages/base/controller/navigation_controller.dart';
 import 'package:greengrocer/src/pages/base/navigation/navigation_tabs.dart';
@@ -232,7 +231,7 @@ class _HomeTabState extends State<HomeTab> {
                           mainAxisSpacing: 10,
                           childAspectRatio: 9 / 11.5,
                           children: List.generate(
-                            mock.items.length,
+                            ctrl.products.length,
                             (index) => CustomShimmer(
                               height: double.infinity,
                               width: double.infinity,

@@ -66,9 +66,9 @@ class OrderTile extends StatelessWidget {
                                     const SizedBox(height: 16.0),
                                 scrollDirection: Axis.vertical,
                                 physics: const BouncingScrollPhysics(),
-                                itemCount: order.items.length,
+                                itemCount: ctrl.order.items.length,
                                 itemBuilder: (ctx, index) =>
-                                    _OrderItemWidget(order.items[index]),
+                                    _OrderItemWidget(ctrl.order.items[index]),
                               ),
                             ),
                           ),

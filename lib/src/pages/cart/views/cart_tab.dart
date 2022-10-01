@@ -93,7 +93,7 @@ class _CartTabState extends State<CartTab> {
                   height: 48.0,
                   child: GetBuilder<CartController>(
                     builder: (ctrl) => ElevatedButton.icon(
-                      onPressed: ctrl.isCheckoutLoading
+                      onPressed: ctrl.isCheckoutLoading || ctrl.cartItems.isEmpty
                           ? null
                           : () async {
                               bool? result = await showOrderConfirmation();
